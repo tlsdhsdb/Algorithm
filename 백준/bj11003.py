@@ -16,5 +16,5 @@ for i in range(N):
         que.popleft()
     que.append((arr[i],i))
     print(que[0][0],end=" ")
-    print(type(que[0]))
+
 
