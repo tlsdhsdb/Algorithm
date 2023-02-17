@@ -4,16 +4,27 @@
 가장 많이 사용된 알파벳이 무엇인지
 단순하게 구현하기 !
 '''
-from collections import deque
 
-value = input()
-dict = {}
 
-for i in value:
+st = input().upper()
 
-    item = i.upper()
-    if item in dict:
-        dict[item] += 1
-    else :
-        dict[item] = 1
+keys = list(set(st))
+values = []
+
+answer = 0
+
+for key in keys:
+    cnt = st.count(key)
+    values.append(cnt)
+
+
+if values.count(max(values)) > 1:
+    print("?")
+else:
+    answer = values.index(max(values))
+    print(keys[answer])
+
+
+
+
 
