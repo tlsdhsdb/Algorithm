@@ -11,7 +11,7 @@ answer = 0
 
 for i in range(l):
     num = ord(st[i]) - 96
-    answer += num * int(math.pow(31,i))
+    answer += num * (31 ** i)
 
 print(answer%1234567891)
 
