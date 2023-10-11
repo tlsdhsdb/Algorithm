@@ -45,7 +45,6 @@ public class Solution {
                     film[d][w] = Integer.parseInt(st.nextToken());
                 }
             }
-            visit = new boolean[D];
             Arrays.fill(arr,-1); // 기본은 아무것도 안채움 상태
 
             if(!isPass()) dfs(0,0);
@@ -68,6 +67,7 @@ public class Solution {
         //주입하지 않음
         arr[depth] = -1;
         dfs(depth+1,idx);
+        
 
         //A를 주입함
         arr[depth] = 0;
