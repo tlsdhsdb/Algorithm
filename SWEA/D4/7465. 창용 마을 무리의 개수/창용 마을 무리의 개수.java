@@ -1,25 +1,19 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 /**
- * @author 신온유
- * @git
- * @youtube
+ * @author onyoo
  * @performance
- * @category dfs & 유니온 파인드
+ * @category
  * @note
- * 창용 마을 무리의 개수
- * 무리의 개수를 구하는 것 -> dfs 탐색 or union find를 통한 방법 두가지 가능
- * dfs의 탐색횟수를 구하면 되고,유니온 파인드의 경우 같은 집합에 포함되어있는지 대표 노드를 찾으면 된다
- * @see https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWngfZVa9XwDFAQU#
- * @since 2023-09-15
+ * @see
+ * @since 2023-10-11
  **/
 public class Solution {
     static int T;
     static int N,M;
-    static int[][] graph;
+    // 노드의 개수 , 간선의 개수
+    static List<Integer>[] list;
     static boolean[] visited;
     static int answer;
     public static void main(String[] args) throws IOException {
@@ -27,41 +21,43 @@ public class Solution {
         StringTokenizer st;
 
         T = Integer.parseInt(br.readLine());
-
-        for(int t = 0;t < T; t++){
+        for(int t=1;t<T+1;t++){
             st = new StringTokenizer(br.readLine()," ");
 
             N = Integer.parseInt(st.nextToken());
             M = Integer.parseInt(st.nextToken());
 
-            graph = new int[N+1][N+1];
-            visited = new boolean[N+1];
+            list = new ArrayList[N];
+            visited = new boolean[N];
+
+            for(int n=0;n<N;n++) list[n] = new ArrayList<>();
+
             answer = 0;
 
-            for(int m = 0; m < M; m++){
+            for(int m=0;m<M;m++){
                 st = new StringTokenizer(br.readLine()," ");
 
-                int i = Integer.parseInt(st.nextToken());
-                int j =  Integer.parseInt(st.nextToken());
+                int a = Integer.parseInt(st.nextToken()) - 1;
+                int b = Integer.parseInt(st.nextToken()) - 1;
 
-                graph[i][j] = 1;
-                graph[j][i] = 1;
+                list[a].add(b);
+                list[b].add(a);
             }
 
-            for(int i=1;i<=N;i++){
-                if(!visited[i]) answer += dfs(i);
+            for(int i=0;i<N;i++){
+                if(!visited[i]){
+                    dfs(i);
+                    answer++;
+                }
             }
-
-            System.out.printf("#%d %d",t+1,answer);
-            System.out.println();
+            System.out.printf("#%d %d \n",t,answer);
         }
     }
-
-    static int dfs(int start){
-        visited[start] = true;
-        for(int i=1;i<=N;i++){
-            if(graph[start][i] == 1 && !visited[i]) dfs(i);
-        }
-        return 1;
+    static void dfs(int start){
+         visited[start] = true;
+         for(int value : list[start]){
+             if(visited[value]) continue;
+             dfs(value);
+         }
     }
 }
