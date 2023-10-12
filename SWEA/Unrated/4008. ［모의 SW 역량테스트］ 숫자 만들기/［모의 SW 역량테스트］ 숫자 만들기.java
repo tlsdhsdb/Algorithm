@@ -8,70 +8,80 @@ import java.util.StringTokenizer;
  * @performance
  * @category
  * @note
- * 주어진 연산자를 이용하여 경우의 수를 만든다 -> 조합 / 중복으로 뽑을 수 있는 연산자도 있다
- * 경우의 수를 이용하여 전체 탐색을 한다 !
- * @see https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWIeRZV6kBUDFAVH
- * @since 2023-10-06
+ * @see
+ * @since 2023-10-12
  **/
 public class Solution {
     static int T,N;
-    static int[] operator; // 연산자의 개수를 저장하는 배열
-    static int[] number; // 숫자를 저장하는 배열 
-    static boolean[] visited; // 방문여부를 체크하는 배열
+    static int[] operator; // 연산자
+    static int[] number; // 사용되는 수식
+    static int[] selected; // 사용될 연산자
     static int max,min;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         T = Integer.parseInt(br.readLine());
-        for(int t = 1; t < T + 1; t++){
+        for(int t=1;t<T+1;t++){
             N = Integer.parseInt(br.readLine());
-            st = new StringTokenizer(br.readLine()," ");
+
             operator = new int[4];
             number = new int[N];
-            max = Integer.MIN_VALUE; // 최대값을 저장하기 위한 값
-            min = Integer.MAX_VALUE; // 최소값을 저장하기 위한 값
-            
+            selected = new int[N-1]; // 연산자의 개수 : 숫자의 개수 - 1
+
+            max = Integer.MIN_VALUE;
+            min = Integer.MAX_VALUE;
+
+            st = new StringTokenizer(br.readLine()," ");
             for(int i=0;i<4;i++){
                 operator[i] = Integer.parseInt(st.nextToken());
             }
 
-            st =new StringTokenizer(br.readLine()," ");
-            for(int i=0;i<N;i++){
-                number[i] = Integer.parseInt(st.nextToken());
+            st = new StringTokenizer(br.readLine()," ");
+            for(int n=0;n<N;n++){
+                number[n] = Integer.parseInt(st.nextToken());
             }
-            dfs(0,new int[N-1]); // 어떤 연산자를 몇개 선택할 것인지 빈배열에 넣을 것 
-            System.out.printf("#%d %d \n",t,max - min);
+            dfs(0);
+            System.out.printf("#%d %d\n",t,Math.abs(max-min));
         }
-
     }
-    static void dfs(int depth,int[] arr){
+
+    static void dfs(int depth){
         if(depth == N-1){
-            //연산자개수 = 숫자 개수 - 1
-            int num = number[0]; // 첫 숫자
-            // 수식계산에 있어서 숫자가 먼저이기 때문에 첫번째 숫자는 따로 빼놓는다
-            for(int i=0;i<number.length - 1;i++){
-                int curr = number[i+1]; // 연산자 다음으로 들어갈 숫자 
-                if(arr[i] == 0) num += curr;
-                else if(arr[i] == 1) num -= curr;
-                else if(arr[i] == 2) num *= curr;
-                else if(arr[i] == 3) num /= curr;
-                // 연산자의 종류에 따라서 연산을 다르게 한다 
-            }
+            // 연산자를 모두 선택했으면 계산을 한다
+            int num = calculate();
             max = Math.max(num,max);
             min = Math.min(num,min);
-            // 연산한 값이 최소인가, 최대인가에 따라서 값을 넣어준다
             return;
         }
-
         for(int i=0;i<4;i++){
-            if(operator[i] == 0) continue; // 개수가 0개가 되면 넘어간다
-            arr[depth] = i; // 0번째로 사용할 연산자는 i
-            --operator[i]; // 사용할 수 있는 연산자의 개수를 하나 줄여준다
-            dfs(depth+1,arr);
-            ++operator[i]; // 다시 되돌려 놓는다
+            if(operator[i]==0) continue; // 연산자 사용 가능 갯수가 없으면 넘어간다
+            selected[depth] = i;
+            operator[i]--; // 연산자의 사용 개수를 줄여준다
+            dfs(depth+1);
+            operator[i]++; // 연산자 되돌려놓기
         }
-        //연산자가 4개이기 때문에,연산자별로 무엇을 선택할지 조합 구성하기
+    }
 
+    static int calculate(){
+
+        int num = number[0];
+        for(int i=1;i<number.length;i++){
+            switch (selected[i-1]){
+                case 0:
+                    num += number[i];
+                    break;
+                case 1:
+                    num -= number[i];
+                    break;
+                case 2:
+                    num *= number[i];
+                    break;
+                case 3:
+                    num /= number[i];
+                    break;
+            }
+        }
+        return num;
     }
 }
