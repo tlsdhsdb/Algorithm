@@ -14,39 +14,36 @@ import java.util.StringTokenizer;
  * 구해야하는 것에 집중하기
  *
  * @see https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRDL1aeugDFAUo&
- * @since 2023/10/09
+ * @since 2023/10/12
  **/
 public class Solution {
     static class Point{
         int x,y;
-
         public Point(int x, int y) {
             this.x = x;
             this.y = y;
         }
     }
     static class Charger{
-        Point point;
-        int c,p; // 충전범위 처리량
+        Point dir;
+        int c,p; // 충전 범위, 처리량
 
-        public Charger(Point point, int c, int p) {
-            this.point = point;
+        public Charger(Point dir, int c, int p) {
+            this.dir = dir;
             this.c = c;
             this.p = p;
         }
     }
     static int T;
-    static int M,A;
-    static int[] dx = {0,-1,0,1,0};
-    static int[] dy = {0,0,1,0,-1};
-
+    static int M,A; // M 이동시간 A 충전기의 개수
     static int[] userA,userB;
-    static Point a,b;
+    static Point a,b; // 유저 a,b 시작지점
     static Charger[] chargers;
     static int answer;
+    static int[] dx = {0,-1,0,1,0};
+    static int[] dy = {0,0,1,0,-1}; // 상 우 하 좌
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
@@ -60,73 +57,66 @@ public class Solution {
             userA = new int[M+1];
             userB = new int[M+1];
 
+            a = new Point(0,0);
+            b = new Point(9,9);
+
             chargers = new Charger[A];
 
             st = new StringTokenizer(br.readLine()," ");
-            for(int time=1;time<=M;time++){
-                userA[time] = Integer.parseInt(st.nextToken());
+            for(int m=1;m<M+1;m++){
+                userA[m] = Integer.parseInt(st.nextToken());
             }
 
             st = new StringTokenizer(br.readLine()," ");
-            for(int time=1;time<=M;time++){
-                userB[time] = Integer.parseInt(st.nextToken());
+            for(int m=1;m<M+1;m++){
+                userB[m] = Integer.parseInt(st.nextToken());
             }
+            //유저 이동 정보 입력
 
             for(int a=0;a<A;a++){
                 st = new StringTokenizer(br.readLine()," ");
                 int y = Integer.parseInt(st.nextToken()) - 1;
                 int x = Integer.parseInt(st.nextToken()) - 1;
-                int c = Integer.parseInt(st.nextToken()); // 충전범위
-                int p = Integer.parseInt(st.nextToken()); // 처리량
-
-                chargers[a] = new Charger(new Point(x,y),c,p); // 좌표가 반대이기 때문에 반대로
-
-            }
-
-            a = new Point(0,0);
-            b = new Point(9,9);
+                int c = Integer.parseInt(st.nextToken());
+                int p = Integer.parseInt(st.nextToken());
+                chargers[a] = new Charger(new Point(x,y),c,p); // 좌표계가 반대이기 때문에 변경해줌
+            }//충전기 입력
 
             answer = 0;
 
             for(int i=0;i<M+1;i++){
+                // 0초부터 시작하기 때문에
                 a.x += dx[userA[i]];
                 a.y += dy[userA[i]];
+
                 b.x += dx[userB[i]];
                 b.y += dy[userB[i]];
 
-                answer += charge();
+                answer += charge(); // 이동할때마다 최대값 구하기
             }
-            //매시간마다 충전하는 것을 시뮬레이션
 
-            System.out.printf("#%d %d \n",t,answer);
+            System.out.printf("#%d %d\n",t,answer);
         }
     }
 
     static int charge(){
-        //완전탐색
-        //모든 경우의 수를 탐색한다
         int max = 0;
         for(int i=0;i<A;i++){
-
             for(int j=0;j<A;j++){
                 int sum = 0;
                 int amountA = isCharge(a,chargers[i]);
                 int amountB = isCharge(b,chargers[j]);
 
-                if(i != j) sum = amountA + amountB; //다른 충전소를 사용하는 경우
-                else sum = Math.max(amountA,amountB); // 같은 충전소를 사용하는 경우 큰값을 저장한다
-                // 같은 충전소를 사용하면 반토막이 나기 때문에,최댓값을 구하기 위해서는 큰 값만 저장한다
+                if(i != j) sum = amountA + amountB;
+                else sum = Math.max(amountA,amountB);
 
-                max = Math.max(sum,max);
-
+                max = Math.max(max,sum); // 큰 값으로 계속 초기화 해주기
             }
         }
         return max;
     }
-
     static int isCharge(Point player,Charger charger){
-        return Math.abs(player.x-charger.point.x) + Math.abs(player.y-charger.point.y) <= charger.c ? charger.p : 0 ;
-        //충전 범위 안으로 들어오면 해당량만큼 처리 가능하다
+        return Math.abs(player.x-charger.dir.x) + Math.abs(player.y - charger.dir.y) <= charger.c ? charger.p : 0;
+        //충전기 범위 안으로 들어오면 충전하고 , 그렇지 않으면
     }
-    //충전 가능여부를 체크하는 함수
 }
