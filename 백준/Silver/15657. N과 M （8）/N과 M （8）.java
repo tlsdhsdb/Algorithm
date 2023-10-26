@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -20,6 +19,7 @@ import java.util.StringTokenizer;
 public class Main {
     static int n,m;
     static int[] arr;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -35,15 +35,15 @@ public class Main {
         for(int i=0;i<n;i++) arr[i] = Integer.parseInt(st.nextToken());
         Arrays.sort(arr);
         dfs(0,new int[m]);
+        System.out.println(sb);
 
     }
     static void dfs(int depth,int[] a){
         if(depth == m){
-            StringBuilder sb = new StringBuilder();
             for(int value : a){
                 sb.append(value + " ");
             }
-            System.out.println(sb);
+            sb.append("\n");
             return;
         }
         for(int i=0;i<arr.length;i++){
