@@ -4,95 +4,76 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 /**
- * @author 신온유
+ * @author onyoo
  * @performance
  * @category
  * @note
- * 기본적인 dfs,bfs 문제
- * @see https://www.acmicpc.net/problem/1260
- * @since 2023-08-10
+ * @see
+ * @since 2023/11/14
  **/
 public class Main {
     static int N,M,V;
-    static LinkedList<Integer>[] adj;
+    static ArrayList<Integer>[] list;
+    static boolean[] visited;
     static StringBuilder sb = new StringBuilder();
-
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+        StringTokenizer st = new StringTokenizer(br.readLine()," ");
 
-        st = new StringTokenizer(br.readLine()," ");
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        V = Integer.parseInt(st.nextToken());
 
-        N = Integer.parseInt(st.nextToken()); // 정점의 개수
-        M = Integer.parseInt(st.nextToken()); // 간선의 개수
-        V = Integer.parseInt(st.nextToken()); // 탐색 시작 번호
+        list = new ArrayList[N+1];
 
-        adj = new LinkedList[N+1];
-
-        for(int n = 0; n < N + 1; n++){
-            adj[n] = new LinkedList();
-        }
+        for(int i=0;i<N+1;i++) list[i] = new ArrayList<>();
 
         for(int m=0;m<M;m++){
             st = new StringTokenizer(br.readLine()," ");
 
-            int from = Integer.parseInt(st.nextToken());
-            int to = Integer.parseInt(st.nextToken());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
 
-            adj[from].add(to);
-            adj[to].add(from);
-
+            list[start].add(end);
+            list[end].add(start);
         }
 
-        for(int i=1;i<=N;i++) Collections.sort(adj[i]);
+        for(int i=0;i<N+1;i++) Collections.sort(list[i]);
 
+        visited = new boolean[N+1];
         dfs(V);
-
         sb.append("\n");
 
+        visited = new boolean[N+1];
         bfs(V);
 
         System.out.println(sb);
 
     }
     static void dfs(int start){
-        Stack<Integer> stack = new Stack<>();
-        boolean visited[] = new boolean[N+1];
-
-        stack.add(start); // 시작정점 저장
-
-        while(!stack.isEmpty()){
-            int target = stack.pop();
-            if(visited[target]) continue; // 이미 방문했다면
-            else visited[target] = true; // 방문하지 않았을 경우
-            sb.append(target + " ");
-            for(int i = adj[target].size() - 1 ; i >= 0 ; i-- ){
-                stack.add(adj[target].get(i));
-            }
+        sb.append(start+" ");
+        visited[start] = true;
+        for(int value : list[start]){
+            if(visited[value]) continue;
+            visited[value] = true;
+            dfs(value);
         }
     }
+
     static void bfs(int start){
         Queue<Integer> que = new ArrayDeque<>();
-        boolean[] visited = new boolean[N+1];
-
         que.add(start);
+        visited[start] = true;
 
         while(!que.isEmpty()){
-            int target = que.poll();
-            if(visited[target]) continue; // 이미 방문한 노드
-            else visited[target] = true; // 방문하지 않은 노드라면
-
-            sb.append(target + " ");
-
-            for(int node : adj[target]){
-                if(!visited[node]){
-                    que.add(node);
-                }
+            int curr = que.poll();
+            sb.append(curr + " ");
+            for(int value : list[curr]){
+                if(visited[value]) continue; // 방문여부
+                visited[value] = true;
+                que.add(value);
             }
         }
     }
-
-
-
 }
