@@ -1,86 +1,89 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
  * @author onyoo
  * @performance
  * @category
  * @note
- * @see https://www.acmicpc.net/problem/4485
- * @since 2023-10-13
+ * @see
+ * @since 2023/11/15
  **/
 public class Main {
-    static class Point implements Comparable<Point> {
-        int x,y;
-        int value;
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
+	static class Point implements Comparable<Point> {
+		int x,y;
+		int value;
 
-        public Point(int x, int y, int value) {
-            this.x = x;
-            this.y = y;
-            this.value = value;
-        }
+		public Point(int x, int y, int value) {
+			this.x = x;
+			this.y = y;
+			this.value = value;
+		}
 
-        @Override
-        public int compareTo(Point o) {
-            return value - o.value;
-        }
-    }
-    static int N;
-    static int[][] map;
-    static Point[] dir = {new Point(0,1),new Point(0,-1),new Point(1,0),new Point(-1,0)};
-    static int answer;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+		@Override
+		public int compareTo(Point o) {
+			return this.value - o.value;
+		}
+	}
+	static int N,min;
+	static int[][] map;
+	static int[] dx = {0,0,1,-1};
+	static int[] dy = {1,-1,0,0};
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 
-        StringTokenizer st;
-        int num = 1;
-        while(true){
-            N = Integer.parseInt(br.readLine());
+		int idx = 1;
 
-            if(N==0){
-                System.out.println(sb);
-                break;
-            }else{
-                map = new int[N][N];
-                answer = Integer.MAX_VALUE;
-                for(int i=0;i<N;i++){
-                    st = new StringTokenizer(br.readLine()," ");
-                    for(int j=0;j<N;j++){
-                        map[i][j] = Integer.parseInt(st.nextToken());
-                    }
-                }
-                bfs();
-                sb.append("Problem "+num+": " + answer);
-                sb.append("\n");
-                //탐색 시작
-            }
-            num++;
-        }
+		while(true){
+			N = Integer.parseInt(br.readLine());
 
-    }
-    static void bfs(){
-        Queue<Point> que = new PriorityQueue<>();
-        boolean[][] visited = new boolean[N][N];
-        que.add(new Point(0,0,map[0][0]));
-        visited[0][0] = true;
+			if(N == 0) break;
 
-        while(!que.isEmpty()){
-            Point curr = que.poll();
-            if(curr.x == N-1 && curr.y == N-1)  answer = Math.min(curr.value,answer);
-            for(Point p : dir){
-                int nx = curr.x + p.x;
-                int ny = curr.y + p.y;
-                if(nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
-                if(visited[nx][ny]) continue;
-                visited[nx][ny] = true;
-                que.add(new Point(nx,ny,curr.value + map[nx][ny]));
-            }
-        }
+			map = new int[N][N];
+			min = Integer.MAX_VALUE;
 
-    }
+			for(int i=0;i<N;i++){
+				st = new StringTokenizer(br.readLine()," ");
+				for(int j=0;j<N;j++){
+					map[i][j] = Integer.parseInt(st.nextToken());
+				}
+			}
+			//가장 최소값으로 가는 경우
+			int answer = bfs();
+			System.out.printf("Problem %d: %d\n",idx++,answer);
+
+
+		}
+	}
+	static int bfs(){
+		Queue<Point> pq = new PriorityQueue<>();
+		int[][] dp = new int[N][N];
+		for(int n=0;n<N;n++) Arrays.fill(dp[n],Integer.MAX_VALUE);
+
+		pq.add(new Point(0,0,0));
+		dp[0][0] = map[0][0];
+		while(!pq.isEmpty()){
+			Point curr = pq.poll();
+			if(curr.x == N-1 && curr.y == N-1) min = Math.min(min,curr.value);
+			for(int i=0;i<4;i++){
+				int nx = curr.x + dx[i];
+				int ny = curr.y + dy[i];
+
+				if(nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
+				if(dp[nx][ny] > dp[curr.x][curr.y] + map[nx][ny]){
+					dp[nx][ny] = dp[curr.x][curr.y] + map[nx][ny];
+					pq.add(new Point(nx,ny,dp[nx][ny]));
+				}
+
+			}
+		}
+		return dp[N-1][N-1];
+	}
 }
