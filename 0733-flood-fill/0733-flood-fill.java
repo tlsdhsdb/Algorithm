@@ -26,9 +26,7 @@ class Solution {
             for(int i=0;i<4;i++){
                 int nx = curx + dx[i];
                 int ny = cury + dy[i];
-
-                System.out.println(nx + " : " + ny);
-
+                
                 if(nx < 0 || ny < 0 || nx >= x || ny >= y) continue;
                 if(image[nx][ny] == color) continue; // 이미 해당 컬러인 경우 방문했기 때문에 더이상 가지 않음
                 if(image[nx][ny] != target) continue; // 시작 컬럼과 같은 색깔이 다를 경우에는 가지 않음
