@@ -19,12 +19,14 @@
 | [0001-two-sum](https://github.com/tlsdhsdb/Algorithm/tree/master/0001-two-sum) |
 | [0141-linked-list-cycle](https://github.com/tlsdhsdb/Algorithm/tree/master/0141-linked-list-cycle) |
 | [0242-valid-anagram](https://github.com/tlsdhsdb/Algorithm/tree/master/0242-valid-anagram) |
+| [0383-ransom-note](https://github.com/tlsdhsdb/Algorithm/tree/master/0383-ransom-note) |
 ## String
 |  |
 | ------- |
 | [0020-valid-parentheses](https://github.com/tlsdhsdb/Algorithm/tree/master/0020-valid-parentheses) |
 | [0125-valid-palindrome](https://github.com/tlsdhsdb/Algorithm/tree/master/0125-valid-palindrome) |
 | [0242-valid-anagram](https://github.com/tlsdhsdb/Algorithm/tree/master/0242-valid-anagram) |
+| [0383-ransom-note](https://github.com/tlsdhsdb/Algorithm/tree/master/0383-ransom-note) |
 ## Stack
 |  |
 | ------- |
@@ -97,4 +99,8 @@
 |  |
 | ------- |
 | [0278-first-bad-version](https://github.com/tlsdhsdb/Algorithm/tree/master/0278-first-bad-version) |
+## Counting
+|  |
+| ------- |
+| [0383-ransom-note](https://github.com/tlsdhsdb/Algorithm/tree/master/0383-ransom-note) |
 <!---LeetCode Topics End-->
