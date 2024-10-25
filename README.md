@@ -44,6 +44,7 @@
 ## Dynamic Programming
 |  |
 | ------- |
+| [0070-climbing-stairs](https://github.com/tlsdhsdb/Algorithm/tree/master/0070-climbing-stairs) |
 | [0121-best-time-to-buy-and-sell-stock](https://github.com/tlsdhsdb/Algorithm/tree/master/0121-best-time-to-buy-and-sell-stock) |
 ## Two Pointers
 |  |
@@ -103,4 +104,12 @@
 |  |
 | ------- |
 | [0383-ransom-note](https://github.com/tlsdhsdb/Algorithm/tree/master/0383-ransom-note) |
+## Math
+|  |
+| ------- |
+| [0070-climbing-stairs](https://github.com/tlsdhsdb/Algorithm/tree/master/0070-climbing-stairs) |
+## Memoization
+|  |
+| ------- |
+| [0070-climbing-stairs](https://github.com/tlsdhsdb/Algorithm/tree/master/0070-climbing-stairs) |
 <!---LeetCode Topics End-->
